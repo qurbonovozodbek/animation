@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animotion Pro | Advanced GSAP Animation Toolkit</title>
+    <title>Animotion Pro | Next-Gen Animation Platform</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
@@ -13,6 +13,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/MotionPathPlugin.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.min.js"></script>
     <style>
         /* ===== BASE STYLES ===== */
         :root {
@@ -40,6 +47,7 @@
             color: var(--light);
             background-color: var(--darker);
             overflow-x: hidden;
+            cursor: none;
         }
 
         /* ===== UTILITY CLASSES ===== */
@@ -1180,6 +1188,32 @@
             background: rgba(76, 201, 240, 0.2);
         }
 
+        /* ===== 3D ELEMENTS ===== */
+        .three-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .three-model {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ===== ANIMATED BACKGROUND ELEMENTS ===== */
+        .animated-bg-element {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.1;
+            z-index: -1;
+        }
+
         /* ===== RESPONSIVE ADJUSTMENTS ===== */
         @media (max-width: 1200px) {
             .hero-section {
@@ -1286,16 +1320,182 @@
                 gap: 10px;
             }
         }
+
+        /* ===== NEW ANIMATION STYLES ===== */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .audio-visualizer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 200px;
+            height: 100px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: flex-end;
+            padding: 10px;
+            gap: 2px;
+            z-index: 1000;
+        }
+
+        .audio-bar {
+            flex: 1;
+            background: var(--primary);
+            border-radius: 2px;
+            transform-origin: bottom;
+        }
+
+        .gyro-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 100px;
+            height: 100px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .gyro-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--secondary);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .interactive-element {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-element::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(76, 201, 240, 0.1), transparent 70%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .interactive-element:hover::after {
+            opacity: 1;
+        }
+
+        .magnetic-element {
+            transition: transform 0.3s ease;
+        }
+
+        .kinetic-typing {
+            position: relative;
+            display: inline-block;
+        }
+
+        .kinetic-typing::after {
+            content: '|';
+            position: absolute;
+            right: -10px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .parallax-layer {
+            position: absolute;
+            will-change: transform;
+        }
+
+        .fluid-simulation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.2;
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
     </style>
 </head>
 <body>
-    <!-- Advanced Three.js Background -->
-    <div id="three-container"></div>
+    <!-- Advanced Three.js Background with Post-processing -->
+    <div id="three-container" class="three-container"></div>
+    
+    <!-- WebGL Fluid Simulation -->
+    <canvas id="fluid-canvas" class="fluid-simulation"></canvas>
+    
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-progress"></div>
+    
+    <!-- Audio Visualizer -->
+    <div class="audio-visualizer" id="audio-visualizer">
+        <div class="audio-bar"></div>
+        <div class="audio-bar"></div>
+        <div class="audio-bar"></div>
+        <div class="audio-bar"></div>
+        <div class="audio-bar"></div>
+        <div class="audio-bar"></div>
+        <div class="audio-bar"></div>
+        <div class="audio-bar"></div>
+        <div class="audio-bar"></div>
+        <div class="audio-bar"></div>
+    </div>
+    
+    <!-- Gyroscope Indicator -->
+    <div class="gyro-indicator" id="gyro-indicator">
+        <div class="gyro-dot"></div>
+    </div>
+    
+    <!-- Animated background elements -->
+    <div class="animated-bg-elements">
+        <div class="animated-bg-element" style="width: 300px; height: 300px; background: var(--primary); top: 20%; left: 10%;"></div>
+        <div class="animated-bg-element" style="width: 500px; height: 500px; background: var(--secondary); bottom: 10%; right: 10%;"></div>
+        <div class="animated-bg-element" style="width: 400px; height: 400px; background: var(--tertiary); top: 50%; left: 50%;"></div>
+    </div>
+    
+    <!-- Particle System -->
+    <div id="particle-system"></div>
     
     <!-- Animated Preloader -->
     <div class="preloader">
         <div class="preloader-circle"></div>
-        <div class="preloader-text">Loading Animations</div>
+        <div class="preloader-text">Initializing Animations</div>
     </div>
     
     <!-- Floating Navigation -->
@@ -1471,6 +1671,26 @@ gsap.to("#morph-svg path", {
                         <span class="tech-badge">GSAP</span>
                     </div>
                 </div>
+                <div class="showcase-item" data-anim="audio">
+                    <div class="showcase-visual" id="showcase-audio"></div>
+                    <h3 class="showcase-title">Audio Visualization</h3>
+                    <p class="showcase-desc">Create stunning visualizations that react to audio frequencies and beats in real-time.</p>
+                    <div class="showcase-tech">
+                        <span class="tech-badge">Web Audio API</span>
+                        <span class="tech-badge">Canvas</span>
+                        <span class="tech-badge">GSAP</span>
+                    </div>
+                </div>
+                <div class="showcase-item" data-anim="gyro">
+                    <div class="showcase-visual" id="showcase-gyro"></div>
+                    <h3 class="showcase-title">Device Motion</h3>
+                    <p class="showcase-desc">Interactive animations that respond to device orientation and motion sensors.</p>
+                    <div class="showcase-tech">
+                        <span class="tech-badge">Gyroscope</span>
+                        <span class="tech-badge">Accelerometer</span>
+                        <span class="tech-badge">GSAP</span>
+                    </div>
+                </div>
             </div>
         </section>
         
@@ -1527,6 +1747,30 @@ gsap.to("#morph-svg path", {
                     </div>
                     <h3 class="plugin-title">CustomEase</h3>
                     <p class="plugin-desc">Create your own custom easing curves with this visual editor that gives you complete control over motion.</p>
+                    <a href="#" class="plugin-link">Learn more <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="plugin-card">
+                    <div class="plugin-icon">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <h3 class="plugin-title">AudioVisual</h3>
+                    <p class="plugin-desc">Connect animations to audio frequencies for music visualization and reactive effects.</p>
+                    <a href="#" class="plugin-link">Learn more <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="plugin-card">
+                    <div class="plugin-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="plugin-title">DeviceMotion</h3>
+                    <p class="plugin-desc">Create animations that respond to device orientation, motion, and gyroscope data.</p>
+                    <a href="#" class="plugin-link">Learn more <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="plugin-card">
+                    <div class="plugin-icon">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <h3 class="plugin-title">FluidSim</h3>
+                    <p class="plugin-desc">Add realistic fluid simulations to your animations with WebGL-powered physics.</p>
                     <a href="#" class="plugin-link">Learn more <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
@@ -1841,17 +2085,36 @@ gsap.to("#morph-svg path", {
         </div>
     </footer>
     
+    <!-- Custom cursor -->
+    <div class="custom-cursor"></div>
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Register GSAP plugins
             gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, Draggable, MotionPathPlugin);
             
-            // Initialize Three.js background
+            // Initialize Three.js background with advanced effects
             initThreeJS();
+            
+            // Initialize WebGL fluid simulation
+            initFluidSimulation();
+            
+            // Initialize particle system
+            initParticleSystem();
+            
+            // Initialize audio visualizer
+            initAudioVisualizer();
+            
+            // Initialize device motion detection
+            initDeviceMotion();
             
             // Preloader animation
             const preloaderTL = gsap.timeline({
-                onComplete: () => document.querySelector('.preloader').style.display = 'none'
+                onComplete: () => {
+                    document.querySelector('.preloader').style.display = 'none';
+                    // Start background music after preloader
+                    startBackgroundAudio();
+                }
             });
             
             preloaderTL.to('.preloader-circle', {
@@ -1865,6 +2128,14 @@ gsap.to("#morph-svg path", {
                 opacity: 0,
                 duration: 0.3
             }, '-=0.2');
+            
+            // Scroll progress indicator
+            window.addEventListener('scroll', () => {
+                const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPosition = window.scrollY;
+                const scrollPercentage = (scrollPosition / scrollHeight) * 100;
+                document.querySelector('.scroll-progress').style.width = `${scrollPercentage}%`;
+            });
             
             // Navigation scroll effect
             let lastScroll = 0;
@@ -2239,89 +2510,231 @@ gsap.to("#morph-svg path", {
                 }
             });
             
-            // Three.js Background Initialization
+            // Three.js Background Initialization with advanced effects
             function initThreeJS() {
                 const container = document.getElementById('three-container');
-                const canvas = document.createElement('canvas');
-                container.appendChild(canvas);
                 
                 // Scene setup
                 const scene = new THREE.Scene();
                 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-                camera.position.z = 5;
+                camera.position.z = 15;
                 
                 const renderer = new THREE.WebGLRenderer({
-                    canvas,
-                    alpha: true,
-                    antialias: true
+                    antialias: true,
+                    alpha: true
                 });
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                container.appendChild(renderer.domElement);
                 
-                // Create a galaxy of particles
-                const particlesGeometry = new THREE.BufferGeometry();
-                const particleCount = 2000;
+                // Add lights
+                const ambientLight = new THREE.AmbientLight(0x404040);
+                scene.add(ambientLight);
                 
-                const posArray = new Float32Array(particleCount * 3);
-                const sizeArray = new Float32Array(particleCount);
-                const colorArray = new Float32Array(particleCount * 3);
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                directionalLight.position.set(1, 1, 1);
+                scene.add(directionalLight);
                 
-                for(let i = 0; i < particleCount * 3; i++) {
-                    // Position particles in a sphere
-                    const radius = Math.random() * 5;
-                    const theta = Math.random() * Math.PI * 2;
-                    const phi = Math.acos(2 * Math.random() - 1);
+                // Create post-processing effects
+                const renderScene = new THREE.RenderPass(scene, camera);
+                const bloomPass = new THREE.UnrealBloomPass(
+                    new THREE.Vector2(window.innerWidth, window.innerHeight),
+                    1.5, 0.4, 0.85
+                );
+                bloomPass.threshold = 0;
+                bloomPass.strength = 1.5;
+                bloomPass.radius = 0.5;
+                
+                const composer = new THREE.EffectComposer(renderer);
+                composer.addPass(renderScene);
+                composer.addPass(bloomPass);
+                
+                // Create a complex 3D animation
+                const group = new THREE.Group();
+                scene.add(group);
+                
+                // Create multiple shapes with different materials
+                const geometries = [
+                    new THREE.BoxGeometry(2, 2, 2),
+                    new THREE.SphereGeometry(1.5, 32, 32),
+                    new THREE.ConeGeometry(1.5, 3, 32),
+                    new THREE.TorusGeometry(1.5, 0.5, 16, 32),
+                    new THREE.OctahedronGeometry(2, 0),
+                    new THREE.DodecahedronGeometry(1.8, 0)
+                ];
+                
+                const materials = [
+                    new THREE.MeshPhongMaterial({ 
+                        color: 0x4cc9f0, 
+                        transparent: true, 
+                        opacity: 0.8,
+                        emissive: 0x4cc9f0,
+                        emissiveIntensity: 0.3
+                    }),
+                    new THREE.MeshPhongMaterial({ 
+                        color: 0xf72585, 
+                        transparent: true, 
+                        opacity: 0.8,
+                        emissive: 0xf72585,
+                        emissiveIntensity: 0.3
+                    }),
+                    new THREE.MeshPhongMaterial({ 
+                        color: 0x7209b7, 
+                        transparent: true, 
+                        opacity: 0.8,
+                        emissive: 0x7209b7,
+                        emissiveIntensity: 0.3
+                    }),
+                    new THREE.MeshPhongMaterial({ 
+                        color: 0x4ade80, 
+                        transparent: true, 
+                        opacity: 0.8,
+                        emissive: 0x4ade80,
+                        emissiveIntensity: 0.3
+                    }),
+                    new THREE.MeshPhongMaterial({ 
+                        color: 0xfbbf24, 
+                        transparent: true, 
+                        opacity: 0.8,
+                        emissive: 0xfbbf24,
+                        emissiveIntensity: 0.3
+                    })
+                ];
+                
+                // Create multiple meshes in a circle with physics-like behavior
+                const meshes = [];
+                const count = 12;
+                
+                for (let i = 0; i < count; i++) {
+                    const geometry = geometries[i % geometries.length];
+                    const material = materials[i % materials.length];
+                    const mesh = new THREE.Mesh(geometry, material);
                     
-                    posArray[i] = radius * Math.sin(phi) * Math.cos(theta);
-                    posArray[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
-                    posArray[i + 2] = radius * Math.cos(phi);
+                    const angle = (i / count) * Math.PI * 2;
+                    const radius = 5 + Math.random() * 2;
                     
-                    // Random sizes
-                    sizeArray[i/3] = Math.random() * 0.2 + 0.05;
+                    mesh.position.x = Math.cos(angle) * radius;
+                    mesh.position.z = Math.sin(angle) * radius;
+                    mesh.position.y = Math.sin(angle * 2) * 2;
                     
-                    // Color variations
-                    colorArray[i] = 0.3 + Math.random() * 0.2; // R
-                    colorArray[i + 1] = 0.8 + Math.random() * 0.2; // G
-                    colorArray[i + 2] = 0.9 + Math.random() * 0.1; // B
+                    mesh.userData = {
+                        angle: angle,
+                        radius: radius,
+                        speed: 0.01 + Math.random() * 0.02,
+                        targetX: mesh.position.x,
+                        targetY: mesh.position.y,
+                        targetZ: mesh.position.z
+                    };
+                    
+                    group.add(mesh);
+                    meshes.push(mesh);
                 }
                 
-                particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-                particlesGeometry.setAttribute('size', new THREE.BufferAttribute(sizeArray, 1));
-                particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+                // Add a central animated sphere with glow
+                const centerSphere = new THREE.Mesh(
+                    new THREE.SphereGeometry(1.5, 32, 32),
+                    new THREE.MeshPhongMaterial({ 
+                        color: 0xffffff,
+                        emissive: 0x4cc9f0,
+                        emissiveIntensity: 0.8,
+                        transparent: true,
+                        opacity: 0.9
+                    })
+                );
+                group.add(centerSphere);
                 
-                const particlesMaterial = new THREE.PointsMaterial({
-                    size: 0.1,
-                    vertexColors: true,
+                // Add connecting lines between meshes
+                const lineGeometry = new THREE.BufferGeometry();
+                const lineMaterial = new THREE.LineBasicMaterial({ 
+                    color: 0x4cc9f0, 
                     transparent: true,
-                    opacity: 0.8,
-                    blending: THREE.AdditiveBlending
+                    opacity: 0.3
                 });
                 
-                const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-                scene.add(particlesMesh);
+                const linePositions = new Float32Array(count * 3 * 2);
+                lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
                 
-                // Add a central glow
-                const glowGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-                const glowMaterial = new THREE.MeshBasicMaterial({
-                    color: 0x4cc9f0,
-                    transparent: true,
-                    opacity: 0.2
-                });
-                const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-                scene.add(glow);
+                const lines = [];
+                for (let i = 0; i < count; i++) {
+                    const line = new THREE.Line(lineGeometry, lineMaterial);
+                    group.add(line);
+                    lines.push(line);
+                }
                 
                 // Animation loop
                 function animate() {
                     requestAnimationFrame(animate);
                     
-                    particlesMesh.rotation.x += 0.0003;
-                    particlesMesh.rotation.y += 0.0005;
+                    // Rotate the entire group
+                    group.rotation.y += 0.002;
+                    group.rotation.x += 0.001;
                     
-                    // Pulsing glow effect
-                    const pulse = Math.sin(Date.now() * 0.001) * 0.1 + 0.5;
-                    glow.scale.set(pulse, pulse, pulse);
+                    // Animate individual meshes with physics-like behavior
+                    meshes.forEach((mesh, i) => {
+                        mesh.rotation.x += 0.01;
+                        mesh.rotation.y += 0.01;
+                        
+                        // Pulsing animation with easing
+                        const scale = 0.8 + Math.sin(Date.now() * 0.001 + i) * 0.2;
+                        gsap.to(mesh.scale, {
+                            x: scale,
+                            y: scale,
+                            z: scale,
+                            duration: 0.5,
+                            ease: 'elastic.out(1, 0.5)'
+                        });
+                        
+                        // Orbital motion with smooth following
+                        mesh.userData.angle += mesh.userData.speed;
+                        
+                        mesh.userData.targetX = Math.cos(mesh.userData.angle) * mesh.userData.radius;
+                        mesh.userData.targetZ = Math.sin(mesh.userData.angle) * mesh.userData.radius;
+                        mesh.userData.targetY = Math.sin(mesh.userData.angle * 2) * 2;
+                        
+                        // Smooth movement to target positions
+                        mesh.position.x += (mesh.userData.targetX - mesh.position.x) * 0.1;
+                        mesh.position.z += (mesh.userData.targetZ - mesh.position.z) * 0.1;
+                        mesh.position.y += (mesh.userData.targetY - mesh.position.y) * 0.1;
+                        
+                        // Update line positions
+                        if (i < lines.length) {
+                            const line = lines[i];
+                            const positions = line.geometry.attributes.position.array;
+                            
+                            positions[0] = mesh.position.x;
+                            positions[1] = mesh.position.y;
+                            positions[2] = mesh.position.z;
+                            
+                            positions[3] = centerSphere.position.x;
+                            positions[4] = centerSphere.position.y;
+                            positions[5] = centerSphere.position.z;
+                            
+                            line.geometry.attributes.position.needsUpdate = true;
+                        }
+                    });
                     
-                    renderer.render(scene, camera);
+                    // Pulsing center sphere with more complex animation
+                    const pulse = 1 + Math.sin(Date.now() * 0.002) * 0.3;
+                    gsap.to(centerSphere.scale, {
+                        x: pulse,
+                        y: pulse,
+                        z: pulse,
+                        duration: 1,
+                        ease: 'elastic.out(1, 0.3)'
+                    });
+                    
+                    // Color change animation
+                    centerSphere.material.color.lerp(
+                        new THREE.Color(
+                            Math.sin(Date.now() * 0.001) * 0.5 + 0.5,
+                            Math.sin(Date.now() * 0.0015) * 0.5 + 0.5,
+                            Math.sin(Date.now() * 0.002) * 0.5 + 0.5
+                        ),
+                        0.05
+                    );
+                    
+                    // Render with post-processing
+                    composer.render();
                 }
                 
                 animate();
@@ -2331,7 +2744,264 @@ gsap.to("#morph-svg path", {
                     camera.aspect = window.innerWidth / window.innerHeight;
                     camera.updateProjectionMatrix();
                     renderer.setSize(window.innerWidth, window.innerHeight);
+                    composer.setSize(window.innerWidth, window.innerHeight);
                 });
+            }
+            
+            // WebGL Fluid Simulation
+            function initFluidSimulation() {
+                const canvas = document.getElementById('fluid-canvas');
+                const gl = canvas.getContext('webgl');
+                
+                if (!gl) {
+                    console.warn('WebGL not supported, fluid simulation disabled');
+                    return;
+                }
+                
+                // Set canvas size
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                
+                // Simple fluid simulation shader (simplified for demo)
+                const vertexShader = `
+                    attribute vec2 position;
+                    void main() {
+                        gl_Position = vec4(position, 0.0, 1.0);
+                    }
+                `;
+                
+                const fragmentShader = `
+                    precision highp float;
+                    uniform float time;
+                    uniform vec2 resolution;
+                    
+                    void main() {
+                        vec2 uv = gl_FragCoord.xy / resolution.xy;
+                        vec3 col = 0.5 + 0.5 * cos(time + uv.xyx + vec3(0, 2, 4));
+                        gl_FragColor = vec4(col, 0.2);
+                    }
+                `;
+                
+                // Compile shaders
+                const vertexShaderObj = gl.createShader(gl.VERTEX_SHADER);
+                gl.shaderSource(vertexShaderObj, vertexShader);
+                gl.compileShader(vertexShaderObj);
+                
+                const fragmentShaderObj = gl.createShader(gl.FRAGMENT_SHADER);
+                gl.shaderSource(fragmentShaderObj, fragmentShader);
+                gl.compileShader(fragmentShaderObj);
+                
+                // Create program
+                const program = gl.createProgram();
+                gl.attachShader(program, vertexShaderObj);
+                gl.attachShader(program, fragmentShaderObj);
+                gl.linkProgram(program);
+                gl.useProgram(program);
+                
+                // Create buffer
+                const buffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+                
+                // Set attributes
+                const positionLocation = gl.getAttribLocation(program, 'position');
+                gl.enableVertexAttribArray(positionLocation);
+                gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+                
+                // Get uniform locations
+                const resolutionLocation = gl.getUniformLocation(program, 'resolution');
+                const timeLocation = gl.getUniformLocation(program, 'time');
+                
+                // Set resolution
+                gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+                
+                // Animation loop
+                let time = 0;
+                function animate() {
+                    time += 0.01;
+                    gl.uniform1f(timeLocation, time);
+                    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+                    requestAnimationFrame(animate);
+                }
+                
+                animate();
+                
+                // Handle resize
+                window.addEventListener('resize', () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    gl.viewport(0, 0, canvas.width, canvas.height);
+                    gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+                });
+            }
+            
+            // Particle System
+            function initParticleSystem() {
+                const container = document.getElementById('particle-system');
+                const particleCount = 200;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    
+                    // Random properties
+                    const size = Math.random() * 10 + 2;
+                    const color = `hsl(${Math.random() * 60 + 180}, 80%, 60%)`;
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+                    const duration = Math.random() * 20 + 10;
+                    const delay = Math.random() * 5;
+                    
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.background = color;
+                    particle.style.left = `${x}%`;
+                    particle.style.top = `${y}%`;
+                    particle.style.opacity = Math.random() * 0.5 + 0.1;
+                    
+                    container.appendChild(particle);
+                    
+                    // Complex animation paths
+                    const path = [
+                        { x: x, y: y },
+                        { x: x + Math.random() * 20 - 10, y: y + Math.random() * 20 - 10 },
+                        { x: x + Math.random() * 40 - 20, y: y + Math.random() * 40 - 20 },
+                        { x: x + Math.random() * 60 - 30, y: y + Math.random() * 60 - 30 },
+                        { x: x, y: y }
+                    ];
+                    
+                    gsap.to(particle, {
+                        motionPath: {
+                            path: path,
+                            type: 'cubic',
+                            curviness: 1.5
+                        },
+                        duration: duration,
+                        delay: delay,
+                        repeat: -1,
+                        ease: 'sine.inOut'
+                    });
+                    
+                    // Pulsing animation
+                    gsap.to(particle, {
+                        scale: Math.random() * 0.5 + 0.5,
+                        duration: Math.random() * 3 + 1,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: 'sine.inOut'
+                    });
+                }
+            }
+            
+            // Audio Visualizer
+            function initAudioVisualizer() {
+                const audioBars = document.querySelectorAll('.audio-bar');
+                let audioContext, analyser, dataArray;
+                
+                // Only initialize if Web Audio API is supported
+                if (window.AudioContext || window.webkitAudioContext) {
+                    try {
+                        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        analyser = audioContext.createAnalyser();
+                        analyser.fftSize = 32;
+                        
+                        const bufferLength = analyser.frequencyBinCount;
+                        dataArray = new Uint8Array(bufferLength);
+                        
+                        // Create oscillator for demo (in a real app, you'd connect to actual audio)
+                        const oscillator = audioContext.createOscillator();
+                        oscillator.type = 'sine';
+                        oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+                        
+                        const gainNode = audioContext.createGain();
+                        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(analyser);
+                        analyser.connect(audioContext.destination);
+                        
+                        oscillator.start();
+                        
+                        // Animation loop
+                        function updateVisualizer() {
+                            analyser.getByteFrequencyData(dataArray);
+                            
+                            audioBars.forEach((bar, i) => {
+                                const value = dataArray[i % dataArray.length] / 255;
+                                const height = value * 100;
+                                
+                                gsap.to(bar, {
+                                    height: `${height}%`,
+                                    duration: 0.1,
+                                    ease: 'power1.out'
+                                });
+                                
+                                // Color change based on frequency
+                                const hue = 180 + (value * 60);
+                                gsap.to(bar, {
+                                    backgroundColor: `hsl(${hue}, 80%, 60%)`,
+                                    duration: 0.3
+                                });
+                            });
+                            
+                            requestAnimationFrame(updateVisualizer);
+                        }
+                        
+                        updateVisualizer();
+                    } catch (e) {
+                        console.warn('Audio Context error:', e);
+                    }
+                }
+            }
+            
+            // Background audio with visualization
+            function startBackgroundAudio() {
+                // In a real implementation, you would play actual audio
+                // This is just a placeholder for the demo
+                console.log('Background audio would start here');
+            }
+            
+            // Device Motion Detection
+            function initDeviceMotion() {
+                const gyroDot = document.querySelector('.gyro-dot');
+                
+                if (window.DeviceOrientationEvent) {
+                    window.addEventListener('deviceorientation', (event) => {
+                        const beta = event.beta;  // -180 to 180 (front-to-back tilt)
+                        const gamma = event.gamma; // -90 to 90 (left-to-right tilt)
+                        
+                        if (beta !== null && gamma !== null) {
+                            // Map device orientation to dot position
+                            const x = (gamma / 90) * 40;
+                            const y = (beta / 180) * 40;
+                            
+                            gsap.to(gyroDot, {
+                                x: x,
+                                y: y,
+                                duration: 0.3,
+                                ease: 'power2.out'
+                            });
+                            
+                            // Change color based on movement
+                            const hue = 180 + (Math.abs(x) + Math.abs(y)) * 2;
+                            gsap.to(gyroDot, {
+                                backgroundColor: `hsl(${hue}, 80%, 60%)`,
+                                duration: 0.5
+                            });
+                        }
+                    });
+                } else {
+                    console.warn('Device orientation not supported');
+                    // Fallback animation
+                    gsap.to(gyroDot, {
+                        x: Math.random() * 40 - 20,
+                        y: Math.random() * 40 - 20,
+                        duration: 2,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: 'sine.inOut'
+                    });
+                }
             }
             
             // Create floating shapes in hero section
@@ -2339,7 +3009,7 @@ gsap.to("#morph-svg path", {
                 const container = document.querySelector('.floating-shapes');
                 const colors = ['rgba(76, 201, 240, 0.1)', 'rgba(247, 37, 133, 0.1)', 'rgba(114, 9, 183, 0.1)'];
                 
-                for (let i = 0; i < 10; i++) {
+                for (let i = 0; i < 15; i++) {
                     const shape = document.createElement('div');
                     shape.className = 'floating-shape';
                     
@@ -2359,12 +3029,32 @@ gsap.to("#morph-svg path", {
                     
                     container.appendChild(shape);
                     
-                    // Animate the shape
+                    // Complex animation paths
+                    const path = [
+                        { x: x, y: y },
+                        { x: x + Math.random() * 20 - 10, y: y + Math.random() * 20 - 10 },
+                        { x: x + Math.random() * 40 - 20, y: y + Math.random() * 40 - 20 },
+                        { x: x + Math.random() * 60 - 30, y: y + Math.random() * 60 - 30 },
+                        { x: x, y: y }
+                    ];
+                    
+                    // Animate the shape with motion path
                     gsap.to(shape, {
-                        x: `${Math.random() * 100 - 50}px`,
-                        y: `${Math.random() * 100 - 50}px`,
+                        motionPath: {
+                            path: path,
+                            type: 'cubic',
+                            curviness: 1.5
+                        },
                         duration: duration,
                         delay: delay,
+                        repeat: -1,
+                        ease: 'sine.inOut'
+                    });
+                    
+                    // Pulsing animation
+                    gsap.to(shape, {
+                        scale: Math.random() * 0.5 + 0.5,
+                        duration: Math.random() * 3 + 1,
                         repeat: -1,
                         yoyo: true,
                         ease: 'sine.inOut'
@@ -2394,7 +3084,7 @@ gsap.to("#morph-svg path", {
                 path.setAttribute('stroke-linejoin', 'round');
                 svg.appendChild(path);
                 
-                // Morph animation
+                // Morph animation with more complex timing
                 const morphTL = gsap.timeline({ repeat: -1, yoyo: true });
                 
                 paths.forEach((p, i) => {
@@ -2402,9 +3092,18 @@ gsap.to("#morph-svg path", {
                         morphTL.to(path, {
                             attr: { d: p },
                             duration: 2,
-                            ease: 'sine.inOut'
+                            ease: 'elastic.out(1, 0.3)'
                         });
                     }
+                });
+                
+                // Color animation
+                gsap.to(path, {
+                    stroke: '#f72585',
+                    duration: 4,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: 'sine.inOut'
                 });
                 
                 // Glow effect
@@ -2412,9 +3111,18 @@ gsap.to("#morph-svg path", {
                 glow.setAttribute('stdDeviation', '5');
                 glow.setAttribute('result', 'glow');
                 
+                const merge = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');
+                const mergeNode1 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
+                mergeNode1.setAttribute('in', 'glow');
+                const mergeNode2 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
+                mergeNode2.setAttribute('in', 'SourceGraphic');
+                merge.appendChild(mergeNode1);
+                merge.appendChild(mergeNode2);
+                
                 const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
                 filter.setAttribute('id', 'glow-filter');
                 filter.appendChild(glow);
+                filter.appendChild(merge);
                 
                 const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
                 defs.appendChild(filter);
@@ -2424,8 +3132,8 @@ gsap.to("#morph-svg path", {
                 
                 // Animate glow
                 gsap.to(glow, {
-                    attr: { stdDeviation: 10 },
-                    duration: 2,
+                    attr: { stdDeviation: 15 },
+                    duration: 3,
                     repeat: -1,
                     yoyo: true,
                     ease: 'sine.inOut'
@@ -2448,7 +3156,7 @@ gsap.to("#morph-svg path", {
                         svg.setAttribute('height', '100%');
                         
                         const paths = [
-                            'M200,100 C250,50 300,50 350,100 C400,150 400,250 350,300 C300,350 250,350 200,300 C150,250 150,150 200,100 Z',
+                            'M200,100 C300,50 400,50 450,100 C500,150 500,250 450,300 C400,350 300,350 250,300 C200,250 200,150 250,100 Z',
                             'M200,150 C225,100 275,100 300,150 C325,200 325,250 300,300 C275,350 225,350 200,300 C175,250 175,200 200,150 Z',
                             'M200,200 C250,150 300,175 350,200 C400,225 400,275 350,300 C300,325 250,300 200,300 C150,300 100,275 100,225 C100,175 150,150 200,200 Z'
                         ];
@@ -2469,9 +3177,18 @@ gsap.to("#morph-svg path", {
                                 morphTL.to(path, {
                                     attr: { d: p },
                                     duration: 2,
-                                    ease: 'sine.inOut'
+                                    ease: 'elastic.out(1, 0.3)'
                                 });
                             }
+                        });
+                        
+                        // Color animation
+                        gsap.to(path, {
+                            fill: '#f72585',
+                            duration: 3,
+                            repeat: -1,
+                            yoyo: true,
+                            ease: 'sine.inOut'
                         });
                         break;
                         
@@ -2517,74 +3234,99 @@ gsap.to("#morph-svg path", {
                                 duration: 1,
                                 delay: i * 0.2
                             });
+                            
+                            // Additional animations
+                            gsap.to(item, {
+                                scrollTrigger: {
+                                    trigger: scrollContainer,
+                                    start: 'top center',
+                                    end: 'bottom center',
+                                    scrub: true
+                                },
+                                rotation: i % 2 === 0 ? 10 : -10,
+                                x: i % 2 === 0 ? '20px' : '-20px',
+                                borderRadius: '40px',
+                                ease: 'power2.out'
+                            });
                         });
                         break;
                         
                     case '3d':
-                        // Create 3D animation demo
-                        const cubeContainer = document.createElement('div');
-                        cubeContainer.style.width = '200px';
-                        cubeContainer.style.height = '200px';
-                        cubeContainer.style.position = 'relative';
-                        cubeContainer.style.perspective = '1000px';
+                        // Create 3D animation demo with Three.js
+                        const threeContainer = document.createElement('div');
+                        threeContainer.style.width = '100%';
+                        threeContainer.style.height = '100%';
+                        showcaseVisual.appendChild(threeContainer);
                         
-                        const cube = document.createElement('div');
-                        cube.style.width = '100%';
-                        cube.style.height = '100%';
-                        cube.style.position = 'relative';
-                        cube.style.transformStyle = 'preserve-3d';
-                        cube.style.transform = 'rotateX(20deg) rotateY(30deg)';
+                        // Set up Three.js scene
+                        const scene = new THREE.Scene();
+                        const camera = new THREE.PerspectiveCamera(75, 400 / 400, 0.1, 1000);
+                        camera.position.z = 5;
                         
-                        const sides = ['front', 'back', 'left', 'right', 'top', 'bottom'];
-                        sides.forEach((side, i) => {
-                            const face = document.createElement('div');
-                            face.style.position = 'absolute';
-                            face.style.width = '100%';
-                            face.style.height = '100%';
-                            face.style.background = `rgba(76, 201, 240, ${0.2 + i * 0.1})`;
-                            face.style.border = '2px solid rgba(255, 255, 255, 0.2)';
-                            face.style.display = 'flex';
-                            face.style.justifyContent = 'center';
-                            face.style.alignItems = 'center';
-                            face.style.fontSize = '2rem';
-                            face.style.color = 'white';
-                            face.textContent = i + 1;
-                            
-                            switch(side) {
-                                case 'front':
-                                    face.style.transform = 'translateZ(100px)';
-                                    break;
-                                case 'back':
-                                    face.style.transform = 'rotateY(180deg) translateZ(100px)';
-                                    break;
-                                case 'left':
-                                    face.style.transform = 'rotateY(-90deg) translateZ(100px)';
-                                    break;
-                                case 'right':
-                                    face.style.transform = 'rotateY(90deg) translateZ(100px)';
-                                    break;
-                                case 'top':
-                                    face.style.transform = 'rotateX(90deg) translateZ(100px)';
-                                    break;
-                                case 'bottom':
-                                    face.style.transform = 'rotateX(-90deg) translateZ(100px)';
-                                    break;
-                            }
-                            
-                            cube.appendChild(face);
+                        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                        renderer.setSize(400, 400);
+                        threeContainer.appendChild(renderer.domElement);
+                        
+                        // Add lights
+                        const ambientLight = new THREE.AmbientLight(0x404040);
+                        scene.add(ambientLight);
+                        
+                        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                        directionalLight.position.set(1, 1, 1);
+                        scene.add(directionalLight);
+                        
+                        // Create a complex 3D object
+                        const geometry = new THREE.BoxGeometry(1, 1, 1);
+                        const material = new THREE.MeshPhongMaterial({ 
+                            color: 0x4cc9f0,
+                            transparent: true,
+                            opacity: 0.8,
+                            emissive: 0x4cc9f0,
+                            emissiveIntensity: 0.3
                         });
+                        const cube = new THREE.Mesh(geometry, material);
+                        scene.add(cube);
                         
-                        cubeContainer.appendChild(cube);
-                        showcaseVisual.appendChild(cubeContainer);
+                        // Add wireframe
+                        const edges = new THREE.EdgesGeometry(geometry);
+                        const line = new THREE.LineSegments(
+                            edges,
+                            new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 })
+                        );
+                        cube.add(line);
                         
-                        // 3D rotation animation
-                        gsap.to(cube, {
-                            rotationY: '+=360',
-                            rotationX: '+=360',
-                            duration: 20,
-                            repeat: -1,
-                            ease: 'none'
-                        });
+                        // Animation loop
+                        function animate() {
+                            requestAnimationFrame(animate);
+                            
+                            cube.rotation.x += 0.01;
+                            cube.rotation.y += 0.01;
+                            
+                            renderer.render(scene, camera);
+                        }
+                        
+                        animate();
+                        
+                        // Add GSAP animation for scale and color
+                        const cubeTL = gsap.timeline({ repeat: -1, yoyo: true });
+                        
+                        cubeTL.to(cube.scale, {
+                            x: 1.5,
+                            y: 1.5,
+                            z: 1.5,
+                            duration: 2,
+                            ease: 'elastic.out(1, 0.3)'
+                        })
+                        .to(cube.material, {
+                            color: '#f72585',
+                            duration: 2,
+                            ease: 'sine.inOut'
+                        }, '-=2')
+                        .to(cube.rotation, {
+                            z: Math.PI * 2,
+                            duration: 4,
+                            ease: 'power2.inOut'
+                        }, '-=2');
                         break;
                         
                     case 'physics':
@@ -2631,14 +3373,150 @@ gsap.to("#morph-svg path", {
                             duration: 0.5,
                             ease: 'sine.inOut'
                         });
+                        
+                        // Add rotation
+                        gsap.to(ball, {
+                            rotation: 360,
+                            duration: 2,
+                            repeat: -1,
+                            ease: 'none'
+                        });
+                        break;
+                        
+                    case 'audio':
+                        // Create audio visualization demo
+                        const audioContainer = document.createElement('div');
+                        audioContainer.style.width = '100%';
+                        audioContainer.style.height = '100%';
+                        audioContainer.style.display = 'flex';
+                        audioContainer.style.justifyContent = 'center';
+                        audioContainer.style.alignItems = 'center';
+                        audioContainer.style.gap = '5px';
+                        
+                        const audioBars = [];
+                        for (let i = 0; i < 20; i++) {
+                            const bar = document.createElement('div');
+                            bar.style.width = '10px';
+                            bar.style.height = '10px';
+                            bar.style.background = '#4cc9f0';
+                            bar.style.borderRadius = '5px';
+                            audioContainer.appendChild(bar);
+                            audioBars.push(bar);
+                        }
+                        
+                        showcaseVisual.appendChild(audioContainer);
+                        
+                        // Simulate audio visualization
+                        setInterval(() => {
+                            audioBars.forEach((bar, i) => {
+                                const height = 10 + Math.random() * 200;
+                                const hue = 180 + (i * 10) + Math.random() * 20;
+                                
+                                gsap.to(bar, {
+                                    height: `${height}px`,
+                                    backgroundColor: `hsl(${hue}, 80%, 60%)`,
+                                    duration: 0.1,
+                                    ease: 'power1.out'
+                                });
+                            });
+                        }, 100);
+                        break;
+                        
+                    case 'gyro':
+                        // Create device motion demo
+                        const gyroContainer = document.createElement('div');
+                        gyroContainer.style.width = '100%';
+                        gyroContainer.style.height = '100%';
+                        gyroContainer.style.position = 'relative';
+                        
+                        const gyroBall = document.createElement('div');
+                        gyroBall.style.width = '50px';
+                        gyroBall.style.height = '50px';
+                        gyroBall.style.background = '#4cc9f0';
+                        gyroBall.style.borderRadius = '50%';
+                        gyroBall.style.position = 'absolute';
+                        gyroBall.style.left = '50%';
+                        gyroBall.style.top = '50%';
+                        gyroBall.style.transform = 'translate(-50%, -50%)';
+                        
+                        gyroContainer.appendChild(gyroBall);
+                        showcaseVisual.appendChild(gyroContainer);
+                        
+                        // Simulate device motion or use real gyro data
+                        if (window.DeviceOrientationEvent) {
+                            window.addEventListener('deviceorientation', (event) => {
+                                const beta = event.beta;  // -180 to 180
+                                const gamma = event.gamma; // -90 to 90
+                                
+                                if (beta !== null && gamma !== null) {
+                                    const x = (gamma / 90) * 100;
+                                    const y = (beta / 180) * 100;
+                                    
+                                    gsap.to(gyroBall, {
+                                        x: `${x}%`,
+                                        y: `${y}%`,
+                                        duration: 0.3,
+                                        ease: 'power2.out'
+                                    });
+                                    
+                                    // Color change based on position
+                                    const hue = 180 + (Math.abs(x) + Math.abs(y)) * 0.5;
+                                    gsap.to(gyroBall, {
+                                        backgroundColor: `hsl(${hue}, 80%, 60%)`,
+                                        duration: 0.5
+                                    });
+                                }
+                            });
+                        } else {
+                            // Fallback animation
+                            const gyroTL = gsap.timeline({ repeat: -1, yoyo: true });
+                            
+                            gyroTL.to(gyroBall, {
+                                x: '30%',
+                                y: '30%',
+                                duration: 2,
+                                ease: 'sine.inOut'
+                            })
+                            .to(gyroBall, {
+                                x: '-30%',
+                                y: '30%',
+                                duration: 2,
+                                ease: 'sine.inOut'
+                            }, '-=1.5')
+                            .to(gyroBall, {
+                                x: '-30%',
+                                y: '-30%',
+                                duration: 2,
+                                ease: 'sine.inOut'
+                            }, '-=1.5')
+                            .to(gyroBall, {
+                                x: '30%',
+                                y: '-30%',
+                                duration: 2,
+                                ease: 'sine.inOut'
+                            }, '-=1.5')
+                            .to(gyroBall, {
+                                x: '0%',
+                                y: '0%',
+                                duration: 2,
+                                ease: 'sine.inOut'
+                            }, '-=1.5');
+                            
+                            // Color animation
+                            gsap.to(gyroBall, {
+                                backgroundColor: '#f72585',
+                                duration: 3,
+                                repeat: -1,
+                                yoyo: true,
+                                ease: 'sine.inOut'
+                            });
+                        }
                         break;
                 }
             }
             
             // Custom cursor
-            const cursor = document.createElement('div');
-            cursor.className = 'custom-cursor';
-            document.body.appendChild(cursor);
+            const cursor = document.querySelector('.custom-cursor');
             
             document.addEventListener('mousemove', (e) => {
                 gsap.to(cursor, {
@@ -2646,6 +3524,42 @@ gsap.to("#morph-svg path", {
                     y: e.clientY,
                     duration: 0.1,
                     ease: 'power2.out'
+                });
+                
+                // Update interactive elements with mouse position
+                document.querySelectorAll('.interactive-element').forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    el.style.setProperty('--mouse-x', `${x}px`);
+                    el.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+            
+            // Magnetic hover effect
+            const magneticElements = document.querySelectorAll('.magnetic-element');
+            magneticElements.forEach(el => {
+                el.addEventListener('mousemove', (e) => {
+                    const rect = el.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    
+                    gsap.to(el, {
+                        x: x * 0.3,
+                        y: y * 0.3,
+                        duration: 0.5,
+                        ease: 'power2.out'
+                    });
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    gsap.to(el, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.5,
+                        ease: 'elastic.out(1, 0.5)'
+                    });
                 });
             });
             
@@ -2660,6 +3574,49 @@ gsap.to("#morph-svg path", {
                     cursor.classList.remove('active');
                 });
             });
+            
+            // Animate background elements
+            const bgElements = document.querySelectorAll('.animated-bg-element');
+            bgElements.forEach((el, i) => {
+                gsap.to(el, {
+                    x: `${Math.random() * 100 - 50}px`,
+                    y: `${Math.random() * 100 - 50}px`,
+                    duration: 20 + i * 5,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: 'sine.inOut'
+                });
+            });
+            
+            // Add scroll-triggered animations to all sections
+            gsap.utils.toArray('section').forEach(section => {
+                gsap.from(section, {
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    },
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: 'power2.out'
+                });
+            });
+            
+            // Kinetic typing effect for hero subtitle
+            const heroSubtitle = document.querySelector('.hero-subtitle');
+            const text = heroSubtitle.textContent;
+            heroSubtitle.textContent = '';
+            
+            let i = 0;
+            const typingInterval = setInterval(() => {
+                if (i < text.length) {
+                    heroSubtitle.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingInterval);
+                }
+            }, 30);
         });
     </script>
 </body>
